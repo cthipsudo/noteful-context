@@ -1,22 +1,42 @@
 import React from 'react'
 import Note from '../Note/Note'
 import './NotePageMain.css'
+import StoreContext from '../StoreContext'
 
-export default function NotePageMain(props) {
-  return (
-    <section className='NotePageMain'>
-      <Note
-        id={props.note.id}
-        name={props.note.name}
-        modified={props.note.modified}
-      />
-      <div className='NotePageMain__content'>
-        {props.note.content.split(/\n \r|\n/).map((para, i) =>
-          <p key={i}>{para}</p>
-        )}
-      </div>
-    </section>
-  )
+export default class NotePageMain extends React.Component {
+  // constructor(props){
+  //   super(props)
+
+  // }
+  onDeleteNote = noteId => {
+    console.log("calls the push");
+    this.props.history.push(`/`)
+  }
+  render(){
+    return (
+      <StoreContext.Consumer>
+        {({notes, findNote}) => {
+          const note = findNote(notes, this.props.noteId);
+          console.log(note);
+          return (
+            <section className='NotePageMain'>
+              <Note
+                id={note.id}
+                name={note.name}
+                modified={note.modified}
+                onDeleteNoteBack={this.onDeleteNote}
+              />
+              <div className='NotePageMain__content'>
+                {note.content.split(/\n \r|\n/).map((para, i) =>
+                  <p key={i}>{para}</p>
+                )}
+              </div>
+            </section>
+          )
+        }}
+      </StoreContext.Consumer>
+    )
+  }
 }
 
 NotePageMain.defaultProps = {
