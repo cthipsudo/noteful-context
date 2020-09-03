@@ -6,6 +6,9 @@ import './Note.css'
 import StoreContext from '../StoreContext'
 
 export default class Note extends React.Component {
+  static defaultProps ={
+    onDeleteNote: () => {},
+  }
   static contextType = StoreContext;
   handleDeleteNote = e => {
     e.preventDefault();
@@ -24,7 +27,7 @@ export default class Note extends React.Component {
         .then(() => {
           this.context.handleDelete(noteId);
           // allow parent to perform extra behaviour
-          this.props.OnDeleteNoteBack(noteId);
+          this.props.onDeleteNote(noteId);
         })
         .catch(error => {
           console.error({ error })

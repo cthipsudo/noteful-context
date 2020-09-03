@@ -8,15 +8,19 @@ export default class NotePageMain extends React.Component {
   //   super(props)
 
   // }
-  onDeleteNote = noteId => {
-    console.log("calls the push");
+  static defaultProps = {
+    match: {
+      params: {}
+    }
+  }
+  handleDeleteNote = noteId => {
     this.props.history.push(`/`)
   }
   render(){
     return (
       <StoreContext.Consumer>
         {({notes, findNote}) => {
-          const note = findNote(notes, this.props.noteId);
+          const note = findNote(notes, this.props.noteId) || { content: '' };
           console.log(note);
           return (
             <section className='NotePageMain'>
@@ -24,7 +28,7 @@ export default class NotePageMain extends React.Component {
                 id={note.id}
                 name={note.name}
                 modified={note.modified}
-                onDeleteNoteBack={this.onDeleteNote}
+                onDeleteNote={this.handleDeleteNote}
               />
               <div className='NotePageMain__content'>
                 {note.content.split(/\n \r|\n/).map((para, i) =>
